@@ -1,3 +1,5 @@
+import { CHANGE_DATA } from "./actionTypes";
+
 const initialState = {
   isLoading: false,
   error: null,
@@ -9,7 +11,12 @@ const initialState = {
 };
 
 const reducer = (state = initialState, action) => {
-  return { ...state };
+  switch (action.type) {
+    case CHANGE_DATA:
+      return { ...state, data: { ...state.data, [action.key]: action.value } };
+    default:
+      return { ...state };
+  }
 };
 
 export default reducer;

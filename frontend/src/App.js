@@ -1,15 +1,9 @@
-import {
-  Container,
-  Grid,
-  IconButton,
-  makeStyles,
-  Paper,
-  TextField,
-} from "@material-ui/core";
-import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
-import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
+import { Container, makeStyles, Paper } from "@material-ui/core";
 import { grey } from "@material-ui/core/colors";
 import React from "react";
+import { useDispatch } from "react-redux";
+import CodeForm from "./components/CodeForm/CodeForm";
+import { changeData } from "./store/actions";
 
 const useStyle = makeStyles((theme) => ({
   app: {
@@ -24,64 +18,17 @@ const useStyle = makeStyles((theme) => ({
 
 function App() {
   const classes = useStyle();
+  const dispatch = useDispatch();
+  const changeDataHandler = (key, value) => dispatch(changeData(key, value));
+  const onFormChange = (event) => {
+    const { name, value } = event.target;
+    changeDataHandler(name, value);
+  };
   return (
     <div className={classes.app}>
       <Container maxWidth="md">
         <Paper className={classes.appInner}>
-          <form validate="true">
-            <Grid container direction="column">
-              <Grid item>
-                <TextField
-                  label="Decoded message"
-                  placeholder="Please, type something."
-                  fullWidth
-                  multiline
-                  rows={4}
-                  margin="normal"
-                  variant="outlined"
-                />
-              </Grid>
-              <Grid item container direction="row" spacing={10}>
-                <Grid item xs={12} md={4}>
-                  <TextField
-                    label="password"
-                    placeholder="Please, type something."
-                    fullWidth
-                    required
-                    margin="normal"
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid
-                  item
-                  xs={12}
-                  md={6}
-                  container
-                  direction="row"
-                  justify="space-between"
-                  alignItems="center"
-                >
-                  <IconButton type="submit" size="medium" color="primary">
-                    <ArrowDownwardIcon fontSize="inherit" />
-                  </IconButton>
-                  <IconButton type="submit" size="medium" color="primary">
-                    <ArrowUpwardIcon fontSize="inherit" />
-                  </IconButton>
-                </Grid>
-              </Grid>
-              <Grid item>
-                <TextField
-                  label="Encoded message"
-                  placeholder="Please, type something."
-                  fullWidth
-                  multiline
-                  rows={4}
-                  margin="normal"
-                  variant="outlined"
-                />
-              </Grid>
-            </Grid>
-          </form>
+          <CodeForm onChange={onFormChange} />
         </Paper>
       </Container>
     </div>
