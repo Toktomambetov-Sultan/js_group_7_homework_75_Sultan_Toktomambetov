@@ -1,9 +1,9 @@
 import { Container, makeStyles, Paper } from "@material-ui/core";
 import { grey } from "@material-ui/core/colors";
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import CodeForm from "./components/CodeForm/CodeForm";
-import { changeData } from "./store/actions";
+import { changeData, codeInit } from "./store/actions";
 
 const useStyle = makeStyles((theme) => ({
   app: {
@@ -20,15 +20,26 @@ function App() {
   const classes = useStyle();
   const dispatch = useDispatch();
   const changeDataHandler = (key, value) => dispatch(changeData(key, value));
+  const codeInitHandler = (action, data) => dispatch(codeInit(action, data));
+  const state = useSelector((state) => state);
   const onFormChange = (event) => {
     const { name, value } = event.target;
     changeDataHandler(name, value);
+  };
+  const onFormSubmit = (event) => {
+    event.preventDefault();
+  };
+  const onFormClick = (event) => {
+    if (state.data.password) {
+      const name = event.currentTarget.name;
+      codeInitHandler(name,state.data);
+    }
   };
   return (
     <div className={classes.app}>
       <Container maxWidth="md">
         <Paper className={classes.appInner}>
-          <CodeForm onChange={onFormChange} />
+          <CodeForm onChange={onFormChange} onSubmit={onFormSubmit} onClick={onFormClick} />
         </Paper>
       </Container>
     </div>
